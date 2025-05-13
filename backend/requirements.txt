@@ -1,0 +1,9 @@
+# backend/requirements.txt
+
+# Core dependencies for the Flask server and image processing
+flask
+opencv-python-headless
+numpy<2 # OpenCV often requires NumPy < 2.0 for compatibility
+
+# For Raspberry Pi camera support (install if running on Pi):
+# picamera2
