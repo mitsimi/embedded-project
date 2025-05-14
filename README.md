@@ -24,21 +24,12 @@ robo-vue/
 
 ## I. System-Level Requirements
 
-These need to be installed on your system (development machine or Raspberry Pi) before setting up the Python environment.
-
-**1. Python 3:**
-
-- Python 3.9+ is recommended.
-- Check with: `python3 --version`
-- **On Raspberry Pi OS:** Usually pre-installed.
-- **On other systems:** Install via your system's package manager (e.g., apt, brew).
-
-**2. `uv` - The Python Packager:**
+**1. `uv` - The Python Packager:**
 
 - `uv` is used to manage Python dependencies and virtual environments.
 - Installation instructions: [https://github.com/astral-sh/uv#installation](https://github.com/astral-sh/uv#installation)
 
-**3. For Raspberry Pi Camera Support (Only on the Raspberry Pi):**
+**2. For Raspberry Pi Camera Support (Only on the Raspberry Pi):**
 
 - **Install `libcamera` System Libraries & Python Bindings:**
   ```bash
@@ -54,11 +45,11 @@ These need to be installed on your system (development machine or Raspberry Pi) 
   ```
   If this saves a `test.jpg`, your system camera setup is likely working.
 
-**4. For Local Webcam Development (e.g., on a Laptop):**
+**3. For Local Webcam Development (e.g., on a Laptop):**
 
 - No specific system packages are usually needed beyond what OpenCV requires, which are typically handled by the `opencv-python-headless` Python package. Ensure your webcam is functional.
 
-**5. Node.js and npm (for Frontend - if you add one):**
+**4. Node.js and npm (for Frontend - if you add one):**
 
 - Node.js LTS version is required
 - A version manager is recommended:
@@ -94,7 +85,7 @@ The `start-dev.sh` script attempts to manage this. However, if setting up manual
 # rm -rf .venv
 
 # Create venv using uv, ensuring it can see system-installed libcamera bindings
-uv venv --python $(which python3) --system-site-packages .venv
+uv venv --system-site-packages .venv
 ```
 
 This step is crucial for `picamera2` to find the system `libcamera` bindings.

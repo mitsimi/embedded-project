@@ -86,8 +86,8 @@ fi
 if [ "$NEEDS_VENV_RECREATE" -eq 1 ]; then
     echo "🛠️ Recreating backend virtual environment '$VENV_DIR'..."
     rm -rf "$VENV_DIR"
-    VENV_CMD="uv venv --python $(which python3) $VENV_DIR"
-    if [[ $USE_PI_CAMERA_FLAG -eq 1 ]]; then VENV_CMD="uv venv --python $(which python3) --system-site-packages $VENV_DIR"; fi
+    VENV_CMD="uv venv $VENV_DIR"
+    if [[ $USE_PI_CAMERA_FLAG -eq 1 ]]; then VENV_CMD="uv venv --system-site-packages $VENV_DIR"; fi
     if ! $VENV_CMD; then echo "❌ Failed to create backend virtual environment." >&2; exit 1; fi # Cleanup
 fi
 
@@ -136,7 +136,7 @@ else
   fi
 
   echo "▶️  Starting frontend dev server (Vite/Vue)..."
-  pnpm dev &> "$PROJECT_ROOT/frontend_server.log" &
+  pnpm run dev &> "$PROJECT_ROOT/frontend_server.log" &
   FRONTEND_PID=$! # PID is set *before* the check
   sleep 5
   if ! ps -p "$FRONTEND_PID" > /dev/null; then # Check if it's still running
