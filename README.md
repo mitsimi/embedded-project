@@ -1,4 +1,4 @@
-# Robo-Vue: Raspberry Pi Camera Streaming Project
+# Raspberry Pi Camera Streaming Project
 
 This project streams video from a Raspberry Pi camera (or a local webcam for development) to a web interface. It consists of a Python backend (Flask + Picamera2/OpenCV) and is intended to be used with a Vue.js frontend (setup for frontend not detailed here but anticipated).
 
@@ -18,7 +18,7 @@ robo-vue/
 ├── frontend/                 # Placeholder for Vue.js frontend
 │   └── ...
 ├── scripts/
-│   └── start-dev.sh          # Script to start the backend (and potentially frontend)
+│   └── start-dev.sh          # Script to start the backend and frontend servers
 └── README.md                 # This file
 ```
 
@@ -31,22 +31,12 @@ These need to be installed on your system (development machine or Raspberry Pi) 
 - Python 3.9+ is recommended.
 - Check with: `python3 --version`
 - **On Raspberry Pi OS:** Usually pre-installed.
-- **On other systems:** Install via your system's package manager (e.g., `sudo apt install python3 python3-pip python3-venv`).
+- **On other systems:** Install via your system's package manager (e.g., apt, brew).
 
 **2. `uv` - The Python Packager:**
 
 - `uv` is used to manage Python dependencies and virtual environments.
 - Installation instructions: [https://github.com/astral-sh/uv#installation](https://github.com/astral-sh/uv#installation)
-- Typically:
-  ```bash
-  # Using pipx (recommended for CLI tools)
-  pipx install uv
-  # Or using pip (if pipx is not available)
-  # pip install uv
-  # Or using cargo (if you have Rust installed)
-  # cargo install uv-cli
-  ```
-- Verify: `uv --version`
 
 **3. For Raspberry Pi Camera Support (Only on the Raspberry Pi):**
 
@@ -80,8 +70,8 @@ The backend is managed using `uv`.
 **1. Clone the Repository (if you haven't):**
 
 ```bash
-git clone <your-repo-url>
-cd robo-vue
+git clone https://github.com/mitsimi/embedded-project.git
+cd embedded-project
 ```
 
 **2. Navigate to the Backend Directory:**
