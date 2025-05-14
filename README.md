@@ -60,8 +60,14 @@ These need to be installed on your system (development machine or Raspberry Pi) 
 
 **5. Node.js and npm (for Frontend - if you add one):**
 
-- If you plan to develop the Vue.js frontend, you'll need Node.js (LTS version recommended) and npm.
-- Installation: [https://nodejs.org/](https://nodejs.org/)
+- Node.js LTS version is required
+- A version manager is recommended:
+  - We recommend using [fnm](https://github.com/Schniz/fnm) for Node.js version management
+- We use [pnpm](https://pnpm.io/) as the package manager
+- Installation:
+  1. Install fnm: Follow instructions at [https://github.com/Schniz/fnm#installation](https://github.com/Schniz/fnm#installation)
+  2. Install Node.js LTS: `fnm install --lts`
+  3. Install pnpm: `npm install -g pnpm`
 
 ## II. Backend Setup & Running
 
@@ -144,15 +150,6 @@ The backend server will start (by default on `http://localhost:5000`).
 
 **6. Stopping the Server:**
 Press `Ctrl+C` in the terminal where `start-dev.sh` is running. The script has a cleanup trap to attempt to stop the backend server.
-
-## III. Frontend Setup (Placeholder)
-
-(This section would detail how to set up and run your Vue.js frontend, including proxying API requests to the backend during development.)
-
-1.  Navigate to `frontend/`.
-2.  Install dependencies: `npm install`
-3.  Start dev server: `npm run dev`
-    (Ensure your Vue app's `vite.config.ts` or equivalent is set up to proxy `/video` requests to `http://localhost:5000` where the Flask backend runs).
 
 ## III. Frontend Setup (Vue.js with pnpm)
 
