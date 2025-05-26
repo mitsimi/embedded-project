@@ -12,7 +12,7 @@ channel_ranges = {
     1: (100, 500),  # Gripper Arm
     2: (100, 470),  # Upper Arm
     3: (100, 520),  # Middle Arm
-    4: {"A": (220, 480), "B": (430, 170)}  # Lower Arm (zwei Bereiche)
+    4: (220, 480)  # Lower Arm
 }
 
 def scale_value(value, min_value, max_value):
