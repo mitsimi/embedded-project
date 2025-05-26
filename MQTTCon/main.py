@@ -1,6 +1,3 @@
-def main():
-    print("Hello from mqttcon!")
+import subprocess
 
-
-if __name__ == "__main__":
-    main()
+subprocess.run(["uv", "run", "MQTTCon.py"])
