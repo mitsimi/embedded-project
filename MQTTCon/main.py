@@ -1,3 +1,3 @@
 import subprocess
 
-subprocess.run(["uv", "run", "MQTTCon.py"])
+subprocess.run(["uv", "run", " mqttCon.py"])
