@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header class="p-4">
     <div
       class="container mx-auto flex flex-col items-center justify-between sm:flex-row"
     >
