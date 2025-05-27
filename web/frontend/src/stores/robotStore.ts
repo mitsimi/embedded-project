@@ -1,6 +1,7 @@
 import type { SystemStatus, Motor } from "@/types/robot";
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
+import { mqttService } from "@/services/mqtt";
 
 export const useRobotStore = defineStore("robot", () => {
   // System status
@@ -64,6 +65,15 @@ export const useRobotStore = defineStore("robot", () => {
   // Computed property for motors
   const motors = computed(() => motorsData.value);
 
+  // Initialize MQTT connection
+  const initializeMQTT = async () => {
+    try {
+      await mqttService.connect();
+    } catch (error) {
+      console.error("Failed to connect to MQTT broker:", error);
+    }
+  };
+
   // Update motor position (preview only)
   const updateMotorPosition = (motorId: number, position: number) => {
     const motorIndex = motorsData.value.findIndex(
@@ -80,9 +90,11 @@ export const useRobotStore = defineStore("robot", () => {
       (motor) => motor.id === motorId,
     );
     if (motorIndex !== -1) {
-      // In a real implementation, this would send the command to the robot
-      // and wait for confirmation before updating the UI
+      // Update the UI
       motorsData.value[motorIndex].position = position;
+
+      // Publish the new position to MQTT
+      mqttService.publishMotorPosition(motorId, position);
     }
   };
 
@@ -94,6 +106,7 @@ export const useRobotStore = defineStore("robot", () => {
     if (motorIndex !== -1) {
       const defaultPosition = motorsData.value[motorIndex].defaultPosition;
       motorsData.value[motorIndex].position = defaultPosition;
+      mqttService.publishMotorPosition(motorId, defaultPosition);
     }
   };
 
@@ -101,6 +114,7 @@ export const useRobotStore = defineStore("robot", () => {
   const resetAllMotors = () => {
     motorsData.value.forEach((motor) => {
       motor.position = motor.defaultPosition;
+      mqttService.publishMotorPosition(motor.id, motor.defaultPosition);
     });
   };
 
@@ -115,6 +129,9 @@ export const useRobotStore = defineStore("robot", () => {
       status.value = "online";
     }, 3000);
   };
+
+  // Initialize MQTT connection when the store is created
+  initializeMQTT();
 
   return {
     systemStatus,
