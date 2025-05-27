@@ -1,7 +1,7 @@
 <template>
   <div class="px-4 py-3">
     <main
-      class="container mx-auto flex flex-grow flex-col overflow-hidden lg:flex-row"
+      class="container mx-auto flex flex-grow flex-col gap-4 overflow-hidden lg:flex-row"
     >
       <!-- Control Panel (40% on desktop, full width on mobile) -->
       <ControlPanel
