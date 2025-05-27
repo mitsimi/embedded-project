@@ -7,13 +7,14 @@ export interface Motor {
   name: string;
   position: number;
   defaultPosition: number;
+  minPulse: number;
+  maxPulse: number;
 }
 
 // Motor control command
 export interface MotorCommand {
   motorId: number;
   position: number;
-  speed?: number;
 }
 
 // System error

@@ -8,12 +8,54 @@ export const useRobotStore = defineStore("robot", () => {
 
   // Motors array
   const motorsData = ref<Motor[]>([
-    { id: 1, name: "Base", position: 90, defaultPosition: 90 },
-    { id: 2, name: "Shoulder", position: 45, defaultPosition: 45 },
-    { id: 3, name: "Elbow", position: 120, defaultPosition: 120 },
-    { id: 4, name: "Wrist Pitch", position: 90, defaultPosition: 90 },
-    { id: 5, name: "Wrist Roll", position: 0, defaultPosition: 0 },
-    { id: 6, name: "Gripper", position: 60, defaultPosition: 60 },
+    {
+      id: 0,
+      name: "Gripper",
+      position: 0,
+      minPulse: 100,
+      maxPulse: 380,
+      defaultPosition: 90,
+    },
+    {
+      id: 1,
+      name: "Gripper Arm",
+      position: 0,
+      minPulse: 100,
+      maxPulse: 500,
+      defaultPosition: 320,
+    },
+    {
+      id: 2,
+      name: "Upper Arm",
+      position: 0,
+      minPulse: 100,
+      maxPulse: 470,
+      defaultPosition: 100,
+    },
+    {
+      id: 3,
+      name: "Middle Arm",
+      position: 0,
+      minPulse: 100,
+      maxPulse: 520,
+      defaultPosition: 100,
+    },
+    {
+      id: 4,
+      name: "Lower Arm",
+      position: 0,
+      minPulse: 220,
+      maxPulse: 380,
+      defaultPosition: 350,
+    },
+    /* {
+      id: 6,
+      name: "Stepper",
+      position: 0,
+      minPulse: 100,
+      maxPulse: 380,
+      defaultPosition: 60,
+    }, */
   ]);
 
   // Computed property for system status
