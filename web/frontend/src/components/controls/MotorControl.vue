@@ -96,20 +96,12 @@ const positionIndicatorStyle = computed(() => {
   const percentage = (position.value / 180) * 100;
   return { left: `${percentage}%` };
 });
-
-// Motor status classes
-const motorStatusClasses = computed(() => {
-  if (isLoading.value) return "bg-warning-500";
-  if (hasError.value) return "bg-danger-500";
-  return "bg-success-500";
-});
 </script>
 
 <template>
   <div class="border p-4">
     <div class="mb-2 flex items-center justify-between">
       <div class="flex items-center">
-        <div :class="['mr-2 h-2 w-2 rounded-full', motorStatusClasses]"></div>
         <h3 class="font-medium">{{ motor.name }}</h3>
       </div>
       <span class="text-xs">ID: {{ motor.id }}</span>
@@ -157,8 +149,9 @@ const motorStatusClasses = computed(() => {
           type="number"
           min="0"
           max="180"
+          :default-value="manualInput"
           :value="manualInput"
-          @input="handleInputChange"
+          @onUpdate="handleInputChange"
           @blur="handleInputBlur"
           class="input-field w-full pr-8"
           :disabled="isLoading"

@@ -1,7 +1,7 @@
 <template>
   <ContextMenu>
     <ContextMenuTrigger asChild>
-      <Button variant="ghost" size="icon">
+      <Button variant="ghost" size="icon" @click="toggleTheme">
         <span class="sr-only">Toggle Theme</span>
         <div class="flex flex-row items-center justify-center">
           <div class="">
@@ -57,4 +57,9 @@ import ContextMenuGroup from "./ui/context-menu/ContextMenuGroup.vue";
 import { CheckIcon } from "lucide-vue-next";
 
 const themeStore = useThemeStore();
+
+const toggleTheme = () => {
+  const newTheme = themeStore.resolvedTheme === "light" ? "dark" : "light";
+  themeStore.changeTheme(newTheme);
+};
 </script>

@@ -8,9 +8,10 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AppFooter: typeof import('./src/components/layout/AppFooter.vue')['default']
     AppHeader: typeof import('./src/components/layout/AppHeader.vue')['default']
     Button: typeof import('./src/components/ui/button/Button.vue')['default']
-    CameraFeed: typeof import('./src/components/CameraFeed.vue')['default']
+    CameraFeed: typeof import('./src/components/controls/CameraFeed.vue')['default']
     Card: typeof import('./src/components/ui/card/Card.vue')['default']
     CardAction: typeof import('./src/components/ui/card/CardAction.vue')['default']
     CardContent: typeof import('./src/components/ui/card/CardContent.vue')['default']
@@ -33,9 +34,12 @@ declare module 'vue' {
     ContextMenuSubContent: typeof import('./src/components/ui/context-menu/ContextMenuSubContent.vue')['default']
     ContextMenuSubTrigger: typeof import('./src/components/ui/context-menu/ContextMenuSubTrigger.vue')['default']
     ContextMenuTrigger: typeof import('./src/components/ui/context-menu/ContextMenuTrigger.vue')['default']
-    ErrorDisplay: typeof import('./src/components/ErrorDisplay.vue')['default']
+    ControlPanel: typeof import('./src/components/controls/ControlPanel.vue')['default']
+    Input: typeof import('./src/components/ui/input/Input.vue')['default']
+    MotorControl: typeof import('./src/components/controls/MotorControl.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Slider: typeof import('./src/components/ui/slider/Slider.vue')['default']
     ThemeSwitch: typeof import('./src/components/ThemeSwitch.vue')['default']
   }
 }

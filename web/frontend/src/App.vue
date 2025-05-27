@@ -4,6 +4,7 @@
     <main class="grow">
       <RouterView />
     </main>
+    <AppFooter />
   </div>
 </template>
 
@@ -11,6 +12,7 @@
 import { RouterView } from "vue-router";
 import { onMounted } from "vue";
 import { useThemeStore } from "@/stores/themeStore";
+import AppFooter from "./components/layout/AppFooter.vue";
 const themeStore = useThemeStore();
 
 onMounted(() => {

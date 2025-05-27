@@ -1,26 +1,27 @@
 <template>
-  <div class="relative mx-auto max-w-max">
+  <div class="card flex h-full flex-col">
+    <div class="mb-4 flex items-center justify-between">
+      <h2 class="text-xl font-semibold">Camera Feed</h2>
+    </div>
     <!-- Loading State -->
     <div
       v-if="isLoading"
-      class="flex items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-100"
-      :style="{ width: `${width}px`, height: `${height}px` }"
+      class="border-muted-foreground bg-muted flex aspect-video w-full items-center justify-center rounded-lg border-2 border-dashed"
     >
       <div class="flex flex-col items-center gap-2">
-        <LoaderCircleIcon class="animate-spin text-gray-600" />
-        <p class="text-sm text-gray-600">Loading camera feed...</p>
+        <LoaderCircleIcon class="text-muted-foreground animate-spin" />
+        <p class="text-muted-foreground text-sm">Loading camera feed...</p>
       </div>
     </div>
 
     <!-- Error State -->
     <div
       v-else-if="hasError"
-      class="flex items-center justify-center rounded-lg border-2 border-dashed border-red-300 bg-red-50"
-      :style="{ width: `${width}px`, height: `${height}px` }"
+      class="border-destructive bg-destructive/10 flex aspect-video w-full items-center justify-center rounded-lg border-2 border-dashed"
     >
       <div class="p-4 text-center">
         <svg
-          class="mx-auto mb-2 h-12 w-12 text-red-400"
+          class="text-destructive mx-auto mb-2 h-12 w-12"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -32,10 +33,10 @@
             d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.962-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
           />
         </svg>
-        <p class="mb-2 text-sm text-red-600">{{ errorMessage }}</p>
+        <p class="text-destructive mb-2 text-sm">{{ errorMessage }}</p>
         <button
           @click="reconnect"
-          class="rounded bg-red-100 px-3 py-1 text-xs text-red-700 transition-colors hover:bg-red-200"
+          class="bg-destructive/10 text-destructive hover:bg-destructive/20 rounded px-3 py-1 text-xs transition-colors"
         >
           Retry Connection
         </button>
@@ -48,9 +49,7 @@
         ref="videoElement"
         :src="streamUrl"
         :alt="alt"
-        :width="width"
-        :height="height"
-        class="rounded-lg shadow-lg"
+        class="border-accent aspect-video w-full rounded-lg border-2 border-dashed object-cover shadow-lg"
         @error="() => onImageError()"
         @loadstart="onLoadStart"
         @loadeddata="onImageLoad"
@@ -59,15 +58,15 @@
 
       <!-- Connection Status Indicator -->
       <div
-        class="bg-opacity-50 absolute top-2 right-2 flex items-center space-x-1 rounded-full bg-black px-2 py-1"
+        class="bg-opacity-50 bg-background/80 absolute top-2 right-2 flex items-center space-x-1 rounded-full px-2 py-1"
       >
         <div
           :class="[
             'h-2 w-2 rounded-full',
-            isConnected ? 'bg-green-400' : 'bg-red-400',
+            isConnected ? 'bg-green-400' : 'bg-destructive',
           ]"
         ></div>
-        <span class="text-xs text-white">
+        <span class="text-foreground text-xs">
           {{ isConnected ? "Live" : "Disconnected" }}
         </span>
       </div>
