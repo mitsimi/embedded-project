@@ -1,11 +1,11 @@
-# Raspberry Pi Camera Streaming Project
+# Web Interface
 
 This project streams video from a Raspberry Pi camera (or a local webcam for development) to a web interface. It consists of a Python backend (Flask + Picamera2/OpenCV) and is intended to be used with a Vue.js frontend (setup for frontend not detailed here but anticipated).
 
 ## Project Structure
 
 ```
-robo-vue/
+web/
 ├── backend/                  # Python Flask backend
 │   ├── .venv/                # Virtual environment created by uv (ignored by git)
 │   ├── src/
