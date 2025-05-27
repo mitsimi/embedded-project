@@ -1,10 +1,12 @@
 # backend/src/pi_camera_app/server.py
 from flask import Flask, Response
+from flask_cors import CORS
 from .camera import initialize_camera, get_frame # Relative import
 import time
 import os
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": ["*"]}})  # Allow requests from your frontend
 
 # Initialize camera once when the app starts, if not already done by a direct call
 # This helps if generate_frames is called by multiple workers/threads
