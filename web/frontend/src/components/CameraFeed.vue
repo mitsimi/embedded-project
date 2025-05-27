@@ -1,15 +1,13 @@
 <template>
-  <div class="relative mx-auto w-full max-w-2xl">
+  <div class="relative mx-auto max-w-max">
     <!-- Loading State -->
     <div
       v-if="isLoading"
       class="flex items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-100"
       :style="{ width: `${width}px`, height: `${height}px` }"
     >
-      <div class="text-center">
-        <div
-          class="mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-b-2 border-gray-900"
-        ></div>
+      <div class="flex flex-col items-center gap-2">
+        <LoaderCircleIcon class="animate-spin text-gray-600" />
         <p class="text-sm text-gray-600">Loading camera feed...</p>
       </div>
     </div>
@@ -78,6 +76,7 @@
 </template>
 
 <script setup lang="ts">
+import { LoaderCircleIcon } from "lucide-vue-next";
 import { ref, onMounted, onUnmounted, computed } from "vue";
 
 interface Props {
