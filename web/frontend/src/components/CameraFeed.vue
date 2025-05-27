@@ -1,0 +1,249 @@
+<template>
+  <div class="relative mx-auto w-full max-w-2xl">
+    <!-- Loading State -->
+    <div
+      v-if="isLoading"
+      class="flex items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-100"
+      :style="{ width: `${width}px`, height: `${height}px` }"
+    >
+      <div class="text-center">
+        <div
+          class="mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-b-2 border-gray-900"
+        ></div>
+        <p class="text-sm text-gray-600">Loading camera feed...</p>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div
+      v-else-if="hasError"
+      class="flex items-center justify-center rounded-lg border-2 border-dashed border-red-300 bg-red-50"
+      :style="{ width: `${width}px`, height: `${height}px` }"
+    >
+      <div class="p-4 text-center">
+        <svg
+          class="mx-auto mb-2 h-12 w-12 text-red-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.962-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+          />
+        </svg>
+        <p class="mb-2 text-sm text-red-600">{{ errorMessage }}</p>
+        <button
+          @click="reconnect"
+          class="rounded bg-red-100 px-3 py-1 text-xs text-red-700 transition-colors hover:bg-red-200"
+        >
+          Retry Connection
+        </button>
+      </div>
+    </div>
+
+    <!-- Camera Feed -->
+    <div v-else class="relative">
+      <img
+        ref="videoElement"
+        :src="streamUrl"
+        :alt="alt"
+        :width="width"
+        :height="height"
+        class="rounded-lg shadow-lg"
+        @error="() => onImageError()"
+        @loadstart="onLoadStart"
+        @loadeddata="onImageLoad"
+        @canplay="onImageLoad"
+      />
+
+      <!-- Connection Status Indicator -->
+      <div
+        class="bg-opacity-50 absolute top-2 right-2 flex items-center space-x-1 rounded-full bg-black px-2 py-1"
+      >
+        <div
+          :class="[
+            'h-2 w-2 rounded-full',
+            isConnected ? 'bg-green-400' : 'bg-red-400',
+          ]"
+        ></div>
+        <span class="text-xs text-white">
+          {{ isConnected ? "Live" : "Disconnected" }}
+        </span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted, computed } from "vue";
+
+interface Props {
+  serverUrl?: string;
+  width?: number;
+  height?: number;
+  alt?: string;
+  autoReconnect?: boolean;
+  reconnectInterval?: number;
+  loadTimeout?: number;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  serverUrl: "http://localhost:5000",
+  width: 640,
+  height: 480,
+  alt: "Camera Feed",
+  autoReconnect: true,
+  reconnectInterval: 5000, // 5 seconds
+  loadTimeout: 10000, // 10 seconds timeout for loading
+});
+
+const isLoading = ref(true);
+const hasError = ref(false);
+const isConnected = ref(false);
+const errorMessage = ref("");
+const videoElement = ref<HTMLImageElement>();
+const reconnectTimer = ref<number>();
+const loadTimeoutTimer = ref<number>();
+
+const streamUrl = computed(() => `${props.serverUrl}/video`);
+
+const clearLoadTimeout = () => {
+  if (loadTimeoutTimer.value) {
+    clearTimeout(loadTimeoutTimer.value);
+    loadTimeoutTimer.value = undefined;
+  }
+};
+
+const startLoadTimeout = () => {
+  clearLoadTimeout();
+  loadTimeoutTimer.value = setTimeout(() => {
+    if (isLoading.value) {
+      onImageError("Connection timeout");
+    }
+  }, props.loadTimeout);
+};
+
+const onLoadStart = () => {
+  isLoading.value = true;
+  hasError.value = false;
+  startLoadTimeout();
+};
+
+const onImageLoad = () => {
+  clearLoadTimeout();
+  isLoading.value = false;
+  hasError.value = false;
+  isConnected.value = true;
+
+  // Clear any existing reconnect timer since we're connected
+  if (reconnectTimer.value) {
+    clearTimeout(reconnectTimer.value);
+    reconnectTimer.value = undefined;
+  }
+};
+
+const onImageError = (customMessage?: string) => {
+  clearLoadTimeout();
+  isLoading.value = false;
+  hasError.value = true;
+  isConnected.value = false;
+  errorMessage.value = customMessage || "Failed to connect to camera feed";
+
+  // Auto-reconnect if enabled
+  if (props.autoReconnect && !reconnectTimer.value) {
+    scheduleReconnect();
+  }
+};
+
+const scheduleReconnect = () => {
+  reconnectTimer.value = setTimeout(() => {
+    reconnect();
+  }, props.reconnectInterval);
+};
+
+const reconnect = () => {
+  if (reconnectTimer.value) {
+    clearTimeout(reconnectTimer.value);
+    reconnectTimer.value = undefined;
+  }
+
+  clearLoadTimeout();
+  isLoading.value = true;
+  hasError.value = false;
+
+  // Force reload the image by updating the src with a cache-busting parameter
+  if (videoElement.value) {
+    const url = new URL(streamUrl.value);
+    url.searchParams.set("t", Date.now().toString());
+    videoElement.value.src = url.toString();
+  }
+
+  startLoadTimeout();
+};
+
+// Alternative approach: Check if stream is working by testing the endpoint
+const testStreamConnection = async () => {
+  try {
+    const response = await fetch(streamUrl.value, {
+      method: "HEAD",
+      signal: AbortSignal.timeout(5000), // 5 second timeout
+    });
+
+    if (response.ok) {
+      // If HEAD request succeeds, the stream should work
+      // Set a shorter timeout and assume success after a brief moment
+      setTimeout(() => {
+        if (isLoading.value && !hasError.value) {
+          onImageLoad();
+        }
+      }, 2000); // Give it 2 seconds to start streaming
+    } else {
+      onImageError("Stream endpoint not available");
+    }
+  } catch (error) {
+    onImageError("Cannot reach camera server");
+  }
+};
+
+// Check connection status periodically
+const checkConnection = () => {
+  if (!hasError.value && isConnected.value) {
+    // Ping the server to check if it's still available
+    fetch(`${props.serverUrl}/`, { method: "HEAD" }).catch(() => {
+      // If ping fails, trigger error state
+      onImageError("Connection lost");
+    });
+  }
+};
+
+let connectionCheckInterval: number;
+
+onMounted(() => {
+  // Test the stream connection first
+  testStreamConnection();
+
+  // Start periodic connection checks
+  connectionCheckInterval = setInterval(checkConnection, 10000); // Check every 10 seconds
+});
+
+onUnmounted(() => {
+  if (reconnectTimer.value) {
+    clearTimeout(reconnectTimer.value);
+  }
+  if (connectionCheckInterval) {
+    clearInterval(connectionCheckInterval);
+  }
+  clearLoadTimeout();
+});
+
+// Expose methods for parent components
+defineExpose({
+  reconnect,
+  isConnected: computed(() => isConnected.value),
+  hasError: computed(() => hasError.value),
+  isLoading: computed(() => isLoading.value),
+});
+</script>
