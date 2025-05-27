@@ -52,8 +52,7 @@
         class="border-accent aspect-video w-full rounded-lg border-2 border-dashed object-cover shadow-lg"
         @error="() => onImageError()"
         @loadstart="onLoadStart"
-        @loadeddata="onImageLoad"
-        @canplay="onImageLoad"
+        @load="onImageLoad"
       />
 
       <!-- Connection Status Indicator -->
