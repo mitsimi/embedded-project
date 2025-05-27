@@ -131,12 +131,6 @@ const positionIndicatorStyle = computed(() => {
         <span class="text-xs">{{ props.motor.maxPulse }}°</span>
       </div>
       <!-- Position indicator -->
-      <!--div
-        :style="positionIndicatorStyle"
-        class="absolute top-0 size-4 -translate-1/2"
-      >
-        <CircleIcon fill="bg-foreground" />
-      </div-->
     </div>
 
     <!-- Controls row -->
