@@ -14,7 +14,6 @@ const emit = defineEmits<{
 }>();
 
 const position = ref(props.motor.position);
-const manualInput = ref(props.motor.position.toString());
 const isLoading = ref(false);
 const hasError = ref(false);
 
@@ -23,30 +22,23 @@ watch(
   () => props.motor.position,
   (newPosition) => {
     position.value = newPosition;
-    manualInput.value = newPosition.toString();
   },
 );
 
 // Slider change handler
 const handleSliderChange = (newPosition: number) => {
   position.value = newPosition;
-  manualInput.value = newPosition.toString();
   updatePosition(newPosition);
 };
 
-// Input change handler
-const handleInputChange = (event: Event) => {
-  manualInput.value = (event.target as HTMLInputElement).value;
-};
-
 // Input blur handler
-const handleInputBlur = () => {
-  let newPosition = parseInt(manualInput.value, 10);
+const handleInputBlur = (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  let newPosition = parseInt(input.value, 10);
 
   // Validate position
   if (isNaN(newPosition)) {
-    newPosition = props.motor.position;
-    manualInput.value = newPosition.toString();
+    input.value = position.value.toString();
     return;
   }
 
@@ -56,7 +48,7 @@ const handleInputBlur = () => {
     Math.min(props.motor.maxPulse, newPosition),
   );
   position.value = newPosition;
-  manualInput.value = newPosition.toString();
+  input.value = newPosition.toString();
   updatePosition(newPosition);
 };
 
@@ -114,7 +106,7 @@ const positionIndicatorStyle = computed(() => {
     <!-- Current position display -->
     <div class="mb-3 flex items-center justify-between">
       <span class="text-sm">Current Position</span>
-      <span class="font-medium">{{ position }}°</span>
+      <span class="font-medium">{{ position.toString() }}°</span>
     </div>
 
     <!-- Slider control -->
@@ -153,11 +145,8 @@ const positionIndicatorStyle = computed(() => {
       <div class="relative flex-grow">
         <Input
           type="number"
-          min="0"
-          max="180"
-          :default-value="manualInput"
-          :value="manualInput"
-          @onUpdate="handleInputChange"
+          :min="props.motor.minPulse"
+          :max="props.motor.maxPulse"
           @blur="handleInputBlur"
           class="input-field w-full pr-8"
           :disabled="isLoading"
