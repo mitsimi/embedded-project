@@ -11,15 +11,15 @@ export const useRobotStore = defineStore("robot", () => {
     {
       id: 0,
       name: "Gripper",
-      position: 0,
+      position: 100,
       minPulse: 100,
       maxPulse: 380,
-      defaultPosition: 90,
+      defaultPosition: 100,
     },
     {
       id: 1,
       name: "Gripper Arm",
-      position: 0,
+      position: 320,
       minPulse: 100,
       maxPulse: 500,
       defaultPosition: 320,
@@ -27,7 +27,7 @@ export const useRobotStore = defineStore("robot", () => {
     {
       id: 2,
       name: "Upper Arm",
-      position: 0,
+      position: 100,
       minPulse: 100,
       maxPulse: 470,
       defaultPosition: 100,
@@ -35,7 +35,7 @@ export const useRobotStore = defineStore("robot", () => {
     {
       id: 3,
       name: "Middle Arm",
-      position: 0,
+      position: 100,
       minPulse: 100,
       maxPulse: 520,
       defaultPosition: 100,
@@ -43,7 +43,7 @@ export const useRobotStore = defineStore("robot", () => {
     {
       id: 4,
       name: "Lower Arm",
-      position: 0,
+      position: 350,
       minPulse: 220,
       maxPulse: 380,
       defaultPosition: 350,

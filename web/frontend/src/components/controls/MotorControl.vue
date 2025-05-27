@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Motor } from "@/types/robot";
+import { RefreshCcwIcon } from "lucide-vue-next";
 import { ref, computed, watch } from "vue";
 
 const props = defineProps<{
@@ -49,8 +50,11 @@ const handleInputBlur = () => {
     return;
   }
 
-  // Clamp value between 0 and 180
-  newPosition = Math.max(0, Math.min(180, newPosition));
+  // Clamp value between min and max pulse
+  newPosition = Math.max(
+    props.motor.minPulse,
+    Math.min(props.motor.maxPulse, newPosition),
+  );
   position.value = newPosition;
   manualInput.value = newPosition.toString();
   updatePosition(newPosition);
@@ -93,7 +97,7 @@ const updatePosition = (newPosition: number) => {
 
 // Calculate position indicator left position
 const positionIndicatorStyle = computed(() => {
-  const percentage = (position.value / 180) * 100;
+  const percentage = (position.value / props.motor.maxPulse) * 100;
   return { left: `${percentage}%` };
 });
 </script>
@@ -118,8 +122,8 @@ const positionIndicatorStyle = computed(() => {
       <div class="bg-foreground h-2 rounded-full"></div>
       <Slider
         type="range"
-        :min="0"
-        :max="180"
+        :min="props.motor.minPulse"
+        :max="props.motor.maxPulse"
         :step="1"
         :model-value="[position]"
         @update:model-value="handleSliderChange"
@@ -128,9 +132,11 @@ const positionIndicatorStyle = computed(() => {
       />
       <!-- Slider tick marks -->
       <div class="mt-1 flex justify-between px-0.5">
-        <span class="text-xs">0°</span>
-        <span class="text-xs">90°</span>
-        <span class="text-xs">180°</span>
+        <span class="text-xs">{{ props.motor.minPulse }}°</span>
+        <span class="text-xs"
+          >{{ (props.motor.maxPulse - props.motor.minPulse) / 2 }}°</span
+        >
+        <span class="text-xs">{{ props.motor.maxPulse }}°</span>
       </div>
       <!-- Position indicator -->
       <!--div
@@ -166,20 +172,7 @@ const positionIndicatorStyle = computed(() => {
 
       <!-- Reset button -->
       <Button variant="secondary" @click="resetMotor" :disabled="isLoading">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-          />
-        </svg>
+        <RefreshCcwIcon />
       </Button>
     </div>
 
