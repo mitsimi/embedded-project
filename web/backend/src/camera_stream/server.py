@@ -6,7 +6,7 @@ import time
 import os
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": ["*"]}})  # Allow requests from your frontend
+CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:3000", "http://localhost:3000"]}})  # Allow requests from your frontend
 
 # Initialize camera once when the app starts, if not already done by a direct call
 # This helps if generate_frames is called by multiple workers/threads

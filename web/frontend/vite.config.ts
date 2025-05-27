@@ -26,6 +26,7 @@ export default defineConfig({
     },
   },
   server: {
+    port: 3000,
     proxy: {
       "/video": {
         target: process.env.VITE_BACKEND_URL || "http://localhost:5000",

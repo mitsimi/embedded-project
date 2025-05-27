@@ -94,7 +94,7 @@ const props = withDefaults(defineProps<Props>(), {
   height: 480,
   alt: "Camera Feed",
   autoReconnect: true,
-  reconnectInterval: 5000, // 5 seconds
+  reconnectInterval: 10000, // 10 seconds
   loadTimeout: 10000, // 10 seconds timeout for loading
 });
 
@@ -103,8 +103,8 @@ const hasError = ref(false);
 const isConnected = ref(false);
 const errorMessage = ref("");
 const videoElement = ref<HTMLImageElement>();
-const reconnectTimer = ref<number>();
-const loadTimeoutTimer = ref<number>();
+const reconnectTimer = ref<NodeJS.Timeout>();
+const loadTimeoutTimer = ref<NodeJS.Timeout>();
 
 const streamUrl = computed(() => `${props.serverUrl}/video`);
 
@@ -185,10 +185,12 @@ const reconnect = () => {
 // Alternative approach: Check if stream is working by testing the endpoint
 const testStreamConnection = async () => {
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
     const response = await fetch(streamUrl.value, {
       method: "HEAD",
-      signal: AbortSignal.timeout(5000), // 5 second timeout
-    });
+      signal: controller.signal,
+    }).finally(() => clearTimeout(timeoutId));
 
     if (response.ok) {
       // If HEAD request succeeds, the stream should work
@@ -217,7 +219,7 @@ const checkConnection = () => {
   }
 };
 
-let connectionCheckInterval: number;
+let connectionCheckInterval: NodeJS.Timeout;
 
 onMounted(() => {
   // Test the stream connection first
