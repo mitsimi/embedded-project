@@ -1,5 +1,5 @@
 <template>
-  <div class="border-4 border-red-600">
+  <div>
     <CameraFeed
       ref="cameraFeedRef"
       :server-url="cameraServerUrl"
