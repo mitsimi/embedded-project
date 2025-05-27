@@ -26,7 +26,7 @@
 import { ref } from "vue";
 import CameraFeed from "@/components/controls/CameraFeed.vue";
 
-const cameraServerUrl = ref("http://localhost:5000"); // Adjust to your server URL
+const cameraServerUrl = ref(`http://${window.location.hostname}:5000`); // Use current hostname
 const cameraFeedRef = ref<InstanceType<typeof CameraFeed>>();
 
 const cameraWidth = 612;
