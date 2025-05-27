@@ -7,7 +7,7 @@ class MQTTService {
   private readonly clientId: string;
 
   constructor(
-    brokerUrl: string = "ws://localhost:9001",
+    brokerUrl: string = `ws://${window.location.hostname}:9001`,
     clientId: string = "web-control-" +
       Math.random().toString(16).substring(2, 10),
   ) {

@@ -88,7 +88,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  serverUrl: "http://localhost:5000",
+  serverUrl: `http://${window.location.hostname}:5000`,
   width: 640,
   height: 480,
   alt: "Camera Feed",
