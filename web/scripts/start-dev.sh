@@ -146,7 +146,7 @@ else
   fi
 
   echo "▶️  Starting frontend dev server (Vite/Vue)..."
-  pnpm run dev &> "$PROJECT_ROOT/frontend_server.log" &
+  pnpm run dev --host &> "$PROJECT_ROOT/frontend_server.log" &
   FRONTEND_PID=$! # PID is set *before* the check
   sleep 5
   if ! ps -p "$FRONTEND_PID" > /dev/null; then # Check if it's still running
@@ -157,7 +157,7 @@ else
       # If backend should continue, comment out the next line.
       exit 1 # This will trigger cleanup
   fi
-  echo "✅ Frontend dev server started (PID $FRONTEND_PID) (e.g., http://localhost:5173)"
+  echo "✅ Frontend dev server started (PID $FRONTEND_PID) (e.g., http://localhost:3000)"
   echo "   Logs: $FRONTEND_DIR/frontend_server.log"
 fi
 
@@ -165,7 +165,7 @@ fi
 echo ""
 echo "🚀 Backend server is running. MJPEG stream: http://localhost:5000/video"
 if [[ -n "$FRONTEND_PID" ]]; then
-    echo "🚀 Frontend dev server is running. Access it at its specified port (e.g., http://localhost:5173)."
+    echo "🚀 Frontend dev server is running. Access it at its specified port (e.g., http://localhost:3000)."
 fi
 echo "   Press Ctrl+C in this terminal to stop the server(s)."
 
