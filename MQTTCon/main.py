@@ -1,0 +1,3 @@
+import mqttCon
+
+mqttCon.main()
