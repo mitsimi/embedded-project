@@ -1,3 +1,3 @@
-import subprocess
+import mqttCon
 
-subprocess.run(["uv", "run", " mqttCon.py"])
+mqttCon.main()
