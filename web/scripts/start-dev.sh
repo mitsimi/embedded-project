@@ -92,18 +92,28 @@ if [ "$NEEDS_VENV_RECREATE" -eq 1 ]; then
 fi
 
 if [[ $USE_PI_CAMERA_FLAG -eq 1 ]]; then
-  echo "📦 Syncing backend dependencies with [pi] extra (Picamera2)..."
+  echo "📦 Installing Pi-specific dependencies..."
   export USE_OPENCV=0
-  if ! uv sync --extra pi; then echo "❌ Error: 'uv sync --extra pi'." >&2; exit 1; fi # Cleanup
+  if ! uv pip install -r requirements.pi.txt; then 
+    echo "❌ Error: Failed to install Pi-specific dependencies." >&2; 
+    exit 1; 
+  fi
   echo "🩺 Diagnostic: Testing Picamera2 import and basic functionality..."
   DIAGNOSTIC_CMD="import picamera2; print('--- Picamera2 module imported ---'); cam = picamera2.Picamera2(); print('--- Picamera2() class instantiated ---');"
-  if uv run python -c "$DIAGNOSTIC_CMD"; then echo "✅ Picamera2 diagnostic successful."; else
+  if uv run python -c "$DIAGNOSTIC_CMD"; then 
+    echo "✅ Picamera2 diagnostic successful."; 
+  else
     echo "⚠️ Picamera2 diagnostic FAILED. Check system libcamera and build deps." >&2; # Not exiting here, let server try
   fi
 else
   echo "📦 Syncing core backend dependencies (OpenCV)..."
   export USE_OPENCV=1
-  if ! uv sync; then echo "❌ Error: 'uv sync'." >&2; exit 1; fi # Cleanup
+fi
+
+# Always sync core dependencies
+if ! uv sync; then 
+  echo "❌ Error: Failed to sync core dependencies." >&2; 
+  exit 1; 
 fi
 
 echo "▶️  Starting backend server (Flask)..."
