@@ -6,24 +6,14 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "Flask>=2.3,<4.0",
+    "flask-cors>=6.0.0",
     "opencv-python-headless>=4.8,<5.0",
     "numpy<2.0" # Crucial for OpenCV compatibility
 ]
 
-[project.optional-dependencies]
-pi = [
-    "picamera2"
-    # python-prctl is often a sub-dependency of picamera2
-    # If picamera2 doesn't pull it in and it's needed, add "python-prctl" here
-]
-
-# This tells build tools (like setuptools, which uv might use)
-# where to find your actual Python package code.
 [tool.setuptools.packages.find]
 where = ["src"]
 
-# This is standard and should be present from `uv init`
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
-# backend-path = ["."] # Usually not needed if pyproject.toml is at the project root

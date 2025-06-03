@@ -92,18 +92,28 @@ if [ "$NEEDS_VENV_RECREATE" -eq 1 ]; then
 fi
 
 if [[ $USE_PI_CAMERA_FLAG -eq 1 ]]; then
-  echo "📦 Syncing backend dependencies with [pi] extra (Picamera2)..."
+  echo "📦 Installing Pi-specific dependencies..."
   export USE_OPENCV=0
-  if ! uv sync --extra pi; then echo "❌ Error: 'uv sync --extra pi'." >&2; exit 1; fi # Cleanup
+  if ! uv pip install -r requirements.pi.txt; then 
+    echo "❌ Error: Failed to install Pi-specific dependencies." >&2; 
+    exit 1; 
+  fi
   echo "🩺 Diagnostic: Testing Picamera2 import and basic functionality..."
   DIAGNOSTIC_CMD="import picamera2; print('--- Picamera2 module imported ---'); cam = picamera2.Picamera2(); print('--- Picamera2() class instantiated ---');"
-  if uv run python -c "$DIAGNOSTIC_CMD"; then echo "✅ Picamera2 diagnostic successful."; else
+  if uv run python -c "$DIAGNOSTIC_CMD"; then 
+    echo "✅ Picamera2 diagnostic successful."; 
+  else
     echo "⚠️ Picamera2 diagnostic FAILED. Check system libcamera and build deps." >&2; # Not exiting here, let server try
   fi
 else
   echo "📦 Syncing core backend dependencies (OpenCV)..."
   export USE_OPENCV=1
-  if ! uv sync; then echo "❌ Error: 'uv sync'." >&2; exit 1; fi # Cleanup
+fi
+
+# Always sync core dependencies
+if ! uv sync; then 
+  echo "❌ Error: Failed to sync core dependencies." >&2; 
+  exit 1; 
 fi
 
 echo "▶️  Starting backend server (Flask)..."
@@ -136,7 +146,7 @@ else
   fi
 
   echo "▶️  Starting frontend dev server (Vite/Vue)..."
-  pnpm run dev &> "$PROJECT_ROOT/frontend_server.log" &
+  pnpm run dev --host &> "$PROJECT_ROOT/frontend_server.log" &
   FRONTEND_PID=$! # PID is set *before* the check
   sleep 5
   if ! ps -p "$FRONTEND_PID" > /dev/null; then # Check if it's still running
@@ -147,7 +157,7 @@ else
       # If backend should continue, comment out the next line.
       exit 1 # This will trigger cleanup
   fi
-  echo "✅ Frontend dev server started (PID $FRONTEND_PID) (e.g., http://localhost:5173)"
+  echo "✅ Frontend dev server started (PID $FRONTEND_PID) (e.g., http://localhost:3000)"
   echo "   Logs: $FRONTEND_DIR/frontend_server.log"
 fi
 
@@ -155,7 +165,7 @@ fi
 echo ""
 echo "🚀 Backend server is running. MJPEG stream: http://localhost:5000/video"
 if [[ -n "$FRONTEND_PID" ]]; then
-    echo "🚀 Frontend dev server is running. Access it at its specified port (e.g., http://localhost:5173)."
+    echo "🚀 Frontend dev server is running. Access it at its specified port (e.g., http://localhost:3000)."
 fi
 echo "   Press Ctrl+C in this terminal to stop the server(s)."
 

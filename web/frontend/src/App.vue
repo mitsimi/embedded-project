@@ -1,24 +1,22 @@
 <template>
-  <div id="app">
-    <h1>Pi Camera Demo</h1>
-    <Camera />
+  <div class="bg-background flex min-h-screen flex-col">
+    <AppHeader />
+    <main class="grow">
+      <RouterView />
+    </main>
+    <AppFooter />
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import Camera from "./components/Camera.vue";
+<script setup lang="ts">
+import { RouterView } from "vue-router";
+import { onMounted } from "vue";
+import { useThemeStore } from "@/stores/themeStore";
+import AppFooter from "./components/layout/AppFooter.vue";
+const themeStore = useThemeStore();
 
-export default defineComponent({
-  name: "App",
-  components: { Camera }
+onMounted(() => {
+  // Initialize theme based on user preference
+  themeStore.initTheme();
 });
 </script>
-
-<style>
-#app {
-  text-align: center;
-  margin-top: 2rem;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-}
-</style>
