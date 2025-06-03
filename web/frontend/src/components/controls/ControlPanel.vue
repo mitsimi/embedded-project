@@ -20,7 +20,7 @@ const setAllPositions = () => {
 <template>
   <div class="card flex h-full flex-col">
     <div class="mb-4 flex items-center justify-between">
-      <h2 class="text-xl font-semibold">Motor Controls</h2>
+      <h2 class="h-10 text-xl font-semibold">Motor Controls</h2>
 
       <div class="flex space-x-2">
         <!-- Set All button -->

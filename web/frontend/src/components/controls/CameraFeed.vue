@@ -1,7 +1,7 @@
 <template>
   <div class="card flex h-full flex-col">
     <div class="mb-4 flex items-center justify-between">
-      <h2 class="text-xl font-semibold">Camera Feed</h2>
+      <h2 class="h-10 text-xl font-semibold">Camera Feed</h2>
     </div>
     <!-- Loading State -->
     <div
