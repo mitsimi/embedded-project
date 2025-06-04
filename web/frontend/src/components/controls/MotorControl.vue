@@ -142,7 +142,7 @@ const positionIndicatorStyle = computed(() => {
           :min="props.motor.minPulse"
           :max="props.motor.maxPulse"
           @blur="handleInputBlur"
-          class="input-field w-full pr-8"
+          class="input-field w-full"
           :disabled="isLoading"
         />
       </div>
