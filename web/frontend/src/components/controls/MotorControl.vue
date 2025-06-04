@@ -106,7 +106,7 @@ const positionIndicatorStyle = computed(() => {
     <!-- Current position display -->
     <div class="mb-3 flex items-center justify-between">
       <span class="text-sm">Current Position</span>
-      <span class="font-medium">{{ position.toString() }}°</span>
+      <span class="font-medium">{{ position.toString() }}</span>
     </div>
 
     <!-- Slider control -->
@@ -124,11 +124,11 @@ const positionIndicatorStyle = computed(() => {
       />
       <!-- Slider tick marks -->
       <div class="mt-1 flex justify-between px-0.5">
-        <span class="text-xs">{{ props.motor.minPulse }}°</span>
-        <span class="text-xs"
-          >{{ (props.motor.maxPulse - props.motor.minPulse) / 2 }}°</span
-        >
-        <span class="text-xs">{{ props.motor.maxPulse }}°</span>
+        <span class="text-xs">{{ props.motor.minPulse }}</span>
+        <span class="text-xs">{{
+          (props.motor.maxPulse + props.motor.minPulse) / 2
+        }}</span>
+        <span class="text-xs">{{ props.motor.maxPulse }}</span>
       </div>
       <!-- Position indicator -->
     </div>
@@ -145,9 +145,6 @@ const positionIndicatorStyle = computed(() => {
           class="input-field w-full pr-8"
           :disabled="isLoading"
         />
-        <span class="absolute top-1/2 right-3 -translate-y-1/2 transform"
-          >°</span
-        >
       </div>
 
       <!-- Set button -->
