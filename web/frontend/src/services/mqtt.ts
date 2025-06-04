@@ -56,7 +56,7 @@ class MQTTService {
     }
 
     const topic = `web/input`;
-    const message = `${motorId}:1:${position}`;
+    const message = `${motorId}:0:${position}`;
 
     this.client.publish(topic, message, { qos: 1 }, (error?: Error) => {
       if (error) {

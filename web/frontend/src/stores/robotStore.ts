@@ -46,7 +46,7 @@ export const useRobotStore = defineStore("robot", () => {
       name: "Lower Arm",
       position: 350,
       minPulse: 220,
-      maxPulse: 380,
+      maxPulse: 480,
       defaultPosition: 350,
     },
     /* {
