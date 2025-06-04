@@ -49,14 +49,14 @@ export const useRobotStore = defineStore("robot", () => {
       maxPulse: 480,
       defaultPosition: 350,
     },
-    /* {
+    {
       id: 6,
       name: "Stepper",
       position: 0,
-      minPulse: 100,
-      maxPulse: 380,
-      defaultPosition: 60,
-    }, */
+      minPulse: 0,
+      maxPulse: 650,
+      defaultPosition: 0,
+    },
   ]);
 
   // Computed property for system status
