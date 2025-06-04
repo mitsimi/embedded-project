@@ -5,7 +5,7 @@ import { mqttService } from "@/services/mqtt";
 
 export const useRobotStore = defineStore("robot", () => {
   // System status
-  const status = ref<SystemStatus>("online");
+  const status = ref<SystemStatus>("offline");
 
   // Motors array
   const motorsData = ref<Motor[]>([
@@ -69,8 +69,10 @@ export const useRobotStore = defineStore("robot", () => {
   const initializeMQTT = async () => {
     try {
       await mqttService.connect();
+      status.value = "online";
     } catch (error) {
       console.error("Failed to connect to MQTT broker:", error);
+      status.value = "error";
     }
   };
 

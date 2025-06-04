@@ -37,6 +37,7 @@ class MQTTService {
       });
     } catch (error) {
       console.error("Failed to initialize MQTT client:", error);
+      this.client = null;
       throw error;
     }
   }

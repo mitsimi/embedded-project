@@ -1,3 +1,9 @@
+<script lang="ts" setup>
+import { useRobotStore } from "@/stores/robotStore";
+
+const robotStore = useRobotStore();
+</script>
+
 <template>
   <header class="border-border bg-background border-b px-4 py-3 sm:p-4">
     <div
@@ -12,9 +18,7 @@
         </div>
         <div class="flex flex-col items-end sm:items-start">
           <h1 class="text-foreground text-xl font-bold">Robotic Arm Control</h1>
-          <span class="text-muted-foreground text-xs">
-            v1.0.0 • Connected
-          </span>
+          <span class="text-muted-foreground text-xs"> v1.0.0 </span>
         </div>
       </div>
 
@@ -24,8 +28,23 @@
       >
         <!-- Status indicator -->
         <div class="flex items-center space-x-2">
-          <div class="bg-primary h-2 w-2 animate-pulse rounded-full"></div>
-          <span class="text-muted-foreground text-sm"> Online </span>
+          <div
+            :class="[
+              'h-2 w-2 animate-pulse rounded-full',
+              {
+                'bg-green-500': robotStore.systemStatus === 'online',
+                'bg-red-500': robotStore.systemStatus === 'error',
+                'bg-yellow-500': robotStore.systemStatus === 'warning',
+                'bg-gray-500': robotStore.systemStatus === 'offline',
+              },
+            ]"
+          ></div>
+          <span class="text-muted-foreground text-sm">
+            {{
+              robotStore.systemStatus.charAt(0).toUpperCase() +
+              robotStore.systemStatus.slice(1)
+            }}
+          </span>
         </div>
 
         <!-- Divider -->
