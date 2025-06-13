@@ -36,7 +36,7 @@ The embedded system responsible for:
 - Position tracking
 - Motor movement control
 
-### 4. Datastore (`/metrics`)
+### 4. Datastore (`/datastore`)
 
 A little service written in Go which ingests MQTT messages in the database.
 
